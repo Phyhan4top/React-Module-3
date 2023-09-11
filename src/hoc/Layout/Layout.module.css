@@ -1,0 +1,29 @@
+.Content {
+    margin-top: 72px;
+}
+
+.nav{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    justify-content: center;
+  
+    align-items: center;
+    height: 100%;
+}
+.nav li{
+    margin: 10px;
+    background-color: chocolate; 
+    padding: 10px 15px;
+    border-radius: 5px;
+
+}
+.nav li a{
+    color: white;
+   text-decoration: none;
+}
+.nav li:hover{
+  background-color: rgb(197, 120, 65);
+  
+}

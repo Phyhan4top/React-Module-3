@@ -1,0 +1,31 @@
+.input{
+
+  width: 80%;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.inputElement{
+  outline: none;
+  border: 1px solid #ccc;
+  background: white;
+  padding: 10px 16px;
+  font: inherit;
+  display: block;
+  width: 80%;
+  margin:  0 auto;
+  box-sizing: border-box;
+}
+.inputElement:focus{
+outline: none;
+background-color: #ccc;
+}
+.label{
+  display: block;
+  margin-top:10px;
+  font-weight: bold;
+}
+.inValid{
+  border: 1px solid red;
+  background: rgb(235, 118, 118);
+}

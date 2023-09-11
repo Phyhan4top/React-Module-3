@@ -1,0 +1,16 @@
+.Container{
+  margin: 15px auto;
+  width: 100%;
+  box-sizing: border-box;
+  box-shadow: 0 2px 3px #ccc;
+  border: 2px solid #eee;
+ text-align: center;
+}
+
+
+
+@media(min-width:600px){
+  .Container{
+    width: 500px;
+  }
+}
