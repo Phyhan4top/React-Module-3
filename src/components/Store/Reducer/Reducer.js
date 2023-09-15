@@ -40,8 +40,7 @@ const BurgerReducer = (state = init, action) => {
         },
         totalPrice: state.totalPrice - INGREDIENT_PRICES[action.ingredientName]})
      case getIngredients:
-      return{
-        ...state,
+      return updatedObj(state,  {
         ingredients:{
           salad:action.ingredients.salad,
           bacon:action.ingredients.bacon,
@@ -49,12 +48,12 @@ const BurgerReducer = (state = init, action) => {
           meat:action.ingredients.meat
         },
        error:false
-      }
+      })
+    
      case fetchIngredientsError:
-      return{
-        ...state,
-        error:true,
-      }
+      return updatedObj(state,{
+        error:true
+      })
     default:
       return state;
   }

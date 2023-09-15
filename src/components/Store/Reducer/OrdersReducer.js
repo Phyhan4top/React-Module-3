@@ -1,4 +1,5 @@
 import { getOrders,errorFetchOrder, deleteOrder, orderSuccess, orderFail, Loading, getOrdersInit, errorFetchOrders} from "../Actions/actionType";
+import { updatedObj } from "./updatedObj";
 const init={
   orders:[],
   error:false,
@@ -8,49 +9,44 @@ const init={
 export const OrdersReducer=(state=init,action)=>{
 switch(action.type){
   case getOrders:
-    return{
-      ...state,
-     error:false,
+    return updatedObj(state,{ error:false,
      loading:false,
-     orders:action.orders
-    }
+     orders:action.orders})
+   
   case getOrdersInit:
-    return{
-      ...state,
+    return updatedObj(state,{
      error:false,
      loading:true
-    }
+    })
+    
   case errorFetchOrders:
-    return{
-      ...state,
+    return updatedObj(state,{
      error:action.error,
      loading:false
-    }
+    })
   case deleteOrder:
-    return{
-      ...state,
+    return updatedObj(state,{
      error:false,
      loading:false,
      orders:state.orders.filter(order=> order.id !== action.orderId
      )
-    }
+    })
+    
   case orderSuccess:
-    return{
-      ...state,
+    return updatedObj(state,{
       loading:false,
       error:false
-    }
+    })
   case orderFail:
-    return{
-      ...state,
+    return updatedObj(state,{
       loading:false,
       error:action.error
-    }
+    })
+    
   case Loading:
-    return{
-      ...state,
+    return updatedObj(state,{
       loading:true
-    }
+    })
     default:
       return state
 }
