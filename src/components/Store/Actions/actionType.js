@@ -1,0 +1,12 @@
+export const addIngredient='Add_Ingredient'
+export const removeIngredient='Remove_Ingredient'
+export const getIngredients='Get__ingredients'
+export const fetchIngredientsError='Ingredients_Error'
+export const getOrders='Get_Orders'
+export const getOrdersInit='Get_OrdersInit'
+export const errorFetchOrders='Fetch_error'
+export const deleteOrder='Delete_Orders'
+export const orderSuccess='Order_Success'
+export const orderFail='Order_fail'
+export const Loading='Loading'
+

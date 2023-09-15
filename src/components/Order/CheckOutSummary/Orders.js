@@ -1,61 +1,62 @@
 import React, { useEffect, useState } from 'react'
 import Order from './Order'
 import instance from '../../../Axios/axios-order'
+import { Delete_Order, Get_Orders, OrdersFetch } from '../../Store/Actions/orderActionCreactors'
+import { connect } from 'react-redux'
+import Spinner from '../../UI/Spinner/Spinner'
 
-function Orders() {
- const [orders,setOrder]= useState([])
- const [loading,setLoading]= useState(true)
- const [error,seterror]= useState(null)
-const deleteOrderHandler=(e,id)=>{
-e.preventDefault()
-  instance.delete(`/orders/${id}.json`)
-  .then(res=>{ 
-   window.location.reload()
-     console.log('order deleted..')
-  })
-  .catch(err=>{
-    console.log('error..')})
- }
+function Orders(props) {
+//  const [orders,setOrder]= useState([])
+//  const [loading,setLoading]= useState(true)
+//  const [error,seterror]= useState(null)
+
  useEffect(()=>{
-instance.get('/orders.json')
-.then(res=>{ 
-  const FetchData=[]
-  for(let key in res.data){
-    FetchData.push({...res.data[key],id:key})
-  }
-   setLoading(false)
- setOrder(FetchData)
-  //  console.log(FetchData)
-})
-.catch(err=>{seterror(err.message)
-  setLoading(false)})
+props.fetchOrders()
 
-  return ()=>{
- 
-  }
+
  },[])
- 
-  return ( <React.Fragment>
+
+ let Load;
+ if(props.loading){
+Load=<Spinner/>
+ }
+else if(props.orders.length){
+  Load=props.orders.map(order=>{
    
-      {orders.length <= 0?<h3 style={{textAlign:'center'}}>Order is empty</h3>:
-      <div>
-      {!error?
-      <div>
-      { orders.map(order=>{
-       return <Order key={order.id}
-       ingredients={order.ingredients}
-       price={order.totalPrice}
-       remove={(e)=>deleteOrderHandler(e,order.id)}
-       />
-      })}
-     </div>
-     :<h1 style={{textAlign:'center'}}>{error}</h1>}
-    </div>
-      }
-    
-     
+    return <Order key={order.id}
+    ingredients={order.order.ingredients}
+    price={order.order.totalPrice}
+    remove={()=>props.deleteOrder(order.id)}
+    />
+   })
+ }else if(props.orders.length <= 0 ){
+Load=<h2 style={{textAlign:'center'}}>Order is Empty</h2>
+   }
+
+ 
+//  let ORDER;
+//  if(props.orders || props.orders.length <=0){
+//  ORDER=<h2 style={{textAlign:'center'}}>Order is Empty</h2>
+//    }else{
+//     ORDER=Load
+//    }
+  return (
+     <React.Fragment>
+      {Load}
      </React.Fragment>
   )
 }
-
-export default Orders
+const mapStateToProps=(state)=>{
+  return{
+    orders:state.orders.orders,
+    error:state.orders.error,
+    loading:state.orders.loading
+  }
+}
+const mapDispatchToProps=(dispatch)=>{
+  return{
+    deleteOrder:(id)=>dispatch(Delete_Order(id)),
+    fetchOrders:()=>dispatch(Get_Orders())
+  }
+}
+export default connect(mapStateToProps,mapDispatchToProps) (Orders)
