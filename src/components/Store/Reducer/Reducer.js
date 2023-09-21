@@ -19,7 +19,8 @@ for (let p in price){
 const init = {
   ingredients: null,
   totalPrice: sum,
-  error:false
+  error:false,
+  
 };
 
 
@@ -52,7 +53,7 @@ const BurgerReducer = (state = init, action) => {
     
      case fetchIngredientsError:
       return updatedObj(state,{
-        error:true
+        error:action.error
       })
     default:
       return state;

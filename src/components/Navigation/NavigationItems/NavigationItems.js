@@ -4,17 +4,35 @@ import classes from './NavigationItems.module.css';
 import NavigationItem from './NavigationItem/NavigationItem';
 import { Route,Routes } from 'react-router';
 import Layout from '../../../hoc/Layout/Layout';
+import { connect } from 'react-redux';
 
-const navigationItems = () => (
+const navigationItems = (props)=>{
+  let OrderNav
+  if(!props.token){
+    
+  }
+   return (
     <Fragment>
     <ul className={classes.NavigationItems}>
    
         <NavigationItem link="/">Burger Builder</NavigationItem>
-        <NavigationItem link="/Order">My Order</NavigationItem>
+        
+      { props.token ===null ?
+        <NavigationItem link="/Auth">Sign in</NavigationItem>:
+        <> <NavigationItem link="/Order">My Order</NavigationItem>
+        <NavigationItem link="/SignOut">Sign Out</NavigationItem></>
+        }
        
     </ul>
    
-    </Fragment>
-);
+    </Fragment>);
+}
 
-export default navigationItems;
+const mapStateToProps=(state)=>{
+    return{
+      token:state.auth.token,
+     
+    }
+  }
+  
+export default connect(mapStateToProps) (navigationItems);

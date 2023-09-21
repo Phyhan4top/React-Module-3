@@ -9,6 +9,7 @@ import { makeOrder } from '../../../Store/Actions/orderActionCreactors'
 import withErrorHandler from '../../../../hoc/withError'
 import axios from 'axios'
 import Spinner from '../../../UI/Spinner/Spinner'
+import { Navigate } from 'react-router'
 class  FormData extends Component {
   constructor(props) {
     super(props)
@@ -130,7 +131,8 @@ class  FormData extends Component {
         valid:true
       }
     },
-  formIsValid:false
+  formIsValid:false,
+  summitted:false
   }
   
 }
@@ -148,11 +150,11 @@ if(rule.minLength){
 if(rule.maxLength){
   isValid=value.length <= rule.maxLength && isValid
 }
-if(rule.isNumeric){
+if(rule.isNumeric ===true){
   const pattern=/^\d+$/
   isValid=pattern.test(value) && isValid
 }
-if(rule.isEmail){
+if(rule.isEmail ===true ){
   const pattern=/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
   isValid=pattern.test(value) && isValid
 }
@@ -163,34 +165,46 @@ const updatedOrder={...this.state.OrderElement}
 const updatedOrderElemet={...updatedOrder[inputIdent]}
 updatedOrderElemet.value=event.target.value;
 updatedOrderElemet.touched=true;
-updatedOrderElemet.valid=this.CheckValidation(updatedOrderElemet.value,updatedOrderElemet.validity)
-updatedOrder[inputIdent]={...updatedOrderElemet}
-let formIsValid=true
-for(let inputIdent in this.state.OrderElement){
-  formIsValid=this.state.OrderElement[inputIdent].valid && formIsValid
+if (inputIdent !== 'delivery') {
+  updatedOrderElemet.valid = this.CheckValidation(
+    updatedOrderElemet.value,
+    updatedOrderElemet.validity
+  );
 }
-this.setState({OrderElement:{...updatedOrder},formIsValid:formIsValid})
+updatedOrder[inputIdent]={...updatedOrderElemet}
+let formValid=true
+for(let inputIdent in this.state.OrderElement){
+  formValid=this.state.OrderElement[inputIdent].valid && formValid;
+
+}
+this.setState({OrderElement:updatedOrder,formIsValid:formValid})
 
 }
  HandleClick=(event)=>{
+  event.preventDefault();
+
   const formData={}
   for(let inputIdent in this.state.OrderElement){
     formData[inputIdent]=this.state.OrderElement[inputIdent].value
   
   }
 
-event.preventDefault()
+
   const order={
                ingredients:this.props.ingredients ,
                totalPrice:this.props.totalPrice,
                info:formData
             }
             // alert('You continue!');
-  this.props.Order(order)
-  console.log(this.props.Orders)
- window.history.forward('/')
+  this.props.Order(this.props.token,order)
+ 
+
+this.setState({summitted:true})
  }
+ 
  render(){
+
+
   const elementOrder=this.state.OrderElement
 const formElement=[]
   for(let key in elementOrder){
@@ -225,6 +239,8 @@ const formElement=[]
 
   if(this.props.loading){
     form=<Spinner/>
+  }else if(this.state.summitted){
+    form =<Navigate to='/' replace/>
   }
   return (
     <div className={classes.Container}>
@@ -240,12 +256,13 @@ const mapStateToProps=(state)=>{
       ingredients:state.burger.ingredients,
       totalPrice:state.burger.totalPrice,
       Orders: state.orders.orders,
-      loading:state.orders.loading
+      loading:state.orders.loading,
+      token:state.auth.token
   }
 }
 const mapDispatchToProps=(dispatch)=>{
   return{
-   Order:(order)=>dispatch(makeOrder(order))
+   Order:(token,order)=>dispatch(makeOrder(token,order))
   } 
 }
 export default connect(mapStateToProps,mapDispatchToProps)(withErrorHandler(FormData,axios) ) 

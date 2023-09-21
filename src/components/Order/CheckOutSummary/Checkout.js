@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Burger from '../../Burger/Burger'
 import Button from '../../UI/Button/Button'
-import { Link, Outlet, Route, Routes, useNavigate,useLocation, redirect } from 'react-router-dom'
+import { Link, Outlet, Route, Routes, useNavigate,useLocation,Navigate} from 'react-router-dom'
 
 import FormData from './DataComponet/FormData'
 import { connect } from 'react-redux'
@@ -32,7 +32,7 @@ useEffect(()=>{
 
 
 },[])
- let summary;
+ let summary=<Navigate to='/' state={{from:'/Checkout'}} replace/>
  if (props.ingredients ){
   summary=(<div style={{margin:'auto'}} >
   <Burger ingredients={props.ingredients}/>
@@ -52,8 +52,6 @@ btnType='Success'>Continue</Button>
 {/* <FormData/> */}
   </div>
 </div>)
- }else{
-  summary=window.location.replace('/')
  }
   return summary
 }

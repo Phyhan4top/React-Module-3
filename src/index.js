@@ -1,5 +1,7 @@
 import React from 'react';
 import { createRoot} from 'react-dom/client';
+
+
 import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
@@ -10,11 +12,15 @@ import BurgerReducer from './components/Store/Reducer/Reducer';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 import { OrdersReducer } from './components/Store/Reducer/OrdersReducer';
+import { AuthReducer } from './components/Store/Reducer/AuthReducer';
 const app= document.getElementById('root');
+
 const RootReducer=combineReducers({
  burger:BurgerReducer,
- orders:OrdersReducer
+ orders:OrdersReducer,
+ auth:AuthReducer
 })
+
 const store=createStore(RootReducer,composeWithDevTools(applyMiddleware(thunk)))
 
 const Root=createRoot(app)

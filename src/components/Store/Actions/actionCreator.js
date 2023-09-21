@@ -20,9 +20,10 @@ const Ingredients=(res)=>{
    ingredients:res
   }
 }
-const IngredientsError=()=>{
+const IngredientsError=(error)=>{
   return {
-    type:fetchIngredientsError
+    type:fetchIngredientsError,
+    error
   }
 }
 export const Get_Ingredient=()=>{
@@ -33,7 +34,7 @@ export const Get_Ingredient=()=>{
       }
       )
       .catch(err=>{
-        dispatch(IngredientsError())
+        dispatch(IngredientsError(err.message))
       })
   }
 }

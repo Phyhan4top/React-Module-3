@@ -9,6 +9,7 @@ import withError from "../../hoc/withError";
 import { connect } from "react-redux";
 import withErrorHandler from "../../hoc/withError";
 import axios from "axios";
+import { Navigate } from "react-router";
 
 
 class BurgerBuilder extends Component {
@@ -43,7 +44,13 @@ class BurgerBuilder extends Component {
   }
 
   purchaseHandler = () => {
-    this.setState({ purchasing: true });
+    let nav
+    if(this.props.token){
+       this.setState({ purchasing: true });
+    }else{
+window.location.replace('/Auth')
+    }
+   
     // this.directUrl();
 
     // window.location.search='?'+ ParamsString;
@@ -75,7 +82,7 @@ class BurgerBuilder extends Component {
     }
   
     let orderSummary = null;
-    let burger = this.props.error ?<Spinner/> : null;
+    let burger = <Spinner/>;
     if (this.props.ingredients) {
       burger = (
         <Fragment>
@@ -88,6 +95,7 @@ class BurgerBuilder extends Component {
             ordered={this.purchaseHandler}
             price={this.props.totalPrice}
             ingredients={this.state.Pass}
+            token={this.props.token}
           />
         </Fragment>
       );
@@ -99,6 +107,8 @@ class BurgerBuilder extends Component {
           purchaseContinued={this.purchaseContinueHandler}
         />
       );
+    }else if(this.props.error){
+      burger=<div style={{textAlign:'center'}}>{this.props.error}</div>
     }
 
     return (
@@ -118,7 +128,8 @@ const mapStateToProps = (state) => {
   return {
     ingredients: state.burger.ingredients,
     totalPrice: state.burger.totalPrice,
-    error:state.burger.error
+    error:state.burger.error,
+    token:state.auth.token
   };
 };
 const mapDispatchToProps = (dispatch) => {

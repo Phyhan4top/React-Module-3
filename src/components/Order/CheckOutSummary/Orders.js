@@ -4,6 +4,7 @@ import instance from '../../../Axios/axios-order'
 import { Delete_Order, Get_Orders, OrdersFetch } from '../../Store/Actions/orderActionCreactors'
 import { connect } from 'react-redux'
 import Spinner from '../../UI/Spinner/Spinner'
+import withErrorHandler from '../../../hoc/withError'
 
 function Orders(props) {
 //  const [orders,setOrder]= useState([])
@@ -11,7 +12,8 @@ function Orders(props) {
 //  const [error,seterror]= useState(null)
 
  useEffect(()=>{
-props.fetchOrders()
+  
+props.fetchOrders(props.token)
 
 
  },[])
@@ -26,20 +28,26 @@ else if(props.orders.length){
     return <Order key={order.id}
     ingredients={order.order.ingredients}
     price={order.order.totalPrice}
-    remove={()=>props.deleteOrder(order.id)}
+    remove={()=>props.deleteOrder(order.id,props.token)}
     />
    })
- }else if(props.orders.length <= 0 ){
+ }else if(props.orders.length <= 0 && !props.error){
 Load=<h2 style={{textAlign:'center'}}>Order is Empty</h2>
+   }else if(props.error){
+Load=<h2 style={{textAlign:'center'}}>Network Error</h2>
    }
+   try {
+    if(props.token === null){
+      throw new Error('Sign in to Continue')
+    }
+    
+  } catch (error) {
+    // Handle the error
+   Load=<div style={{textAlign:'center'}}> <h2>   {error.message}</h2> 
+   <button onClick={()=>window.location.replace('/Auth')}>Sign in</button>
+   </div>
+  }
 
- 
-//  let ORDER;
-//  if(props.orders || props.orders.length <=0){
-//  ORDER=<h2 style={{textAlign:'center'}}>Order is Empty</h2>
-//    }else{
-//     ORDER=Load
-//    }
   return (
      <React.Fragment>
       {Load}
@@ -50,13 +58,14 @@ const mapStateToProps=(state)=>{
   return{
     orders:state.orders.orders,
     error:state.orders.error,
-    loading:state.orders.loading
+    loading:state.orders.loading,
+    token:state.auth.token
   }
 }
 const mapDispatchToProps=(dispatch)=>{
   return{
-    deleteOrder:(id)=>dispatch(Delete_Order(id)),
-    fetchOrders:()=>dispatch(Get_Orders())
+    deleteOrder:(id,token)=>dispatch(Delete_Order(id,token)),
+    fetchOrders:(token)=>dispatch(Get_Orders(token))
   }
 }
 export default connect(mapStateToProps,mapDispatchToProps) (Orders)

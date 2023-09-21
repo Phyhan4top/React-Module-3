@@ -21,14 +21,14 @@ const Load=()=>{
   }
 }
 
-export const makeOrder=(order)=>{
+export const makeOrder=(token,order)=>{
   
   return dispatch=>{
     dispatch(Load())
-    instance.post('/order.json',order)
+    instance.post('/order.json?auth='+ token,order)
     .then(res=>{ console.log(res.data)
     dispatch(Order_Success())
-    window.location.replace('/')
+
 
     })
     .catch(err=>{
@@ -44,9 +44,9 @@ const orderDelete =(id)=>{
     orderId:id
   }
 }
-export const Delete_Order=(id)=>{
+export const Delete_Order=(id,token)=>{
   return dispatch=>{
-    instance.delete(`/order/${id}.json`)
+    instance.delete(`/order/${id}.json?auth=` + token)
   .then(res=>{
    dispatch(orderDelete(id))
      console.log('order deleted..')
@@ -74,10 +74,10 @@ const getorderError=(error)=>{
     error:error
   }
 }
-export const Get_Orders=()=>{
+export const Get_Orders=(token)=>{
   return dispatch=>{
     dispatch(getorderInit())
-    instance.get(`/order.json`)
+    instance.get(`/order.json?auth=`+ token)
     .then(res=>{
       const OrdersForm=[]
       for(let key in res.data){

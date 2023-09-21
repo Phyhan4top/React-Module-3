@@ -9,4 +9,8 @@ export const deleteOrder='Delete_Orders'
 export const orderSuccess='Order_Success'
 export const orderFail='Order_fail'
 export const Loading='Loading'
+export const Auth_Init='Auth_Init'
+export const Auth_Success='Auth_Succes'
+export const Auth_Fail='Auth_Fail'
+export const Auth_signOut='Auth_SignOut'
 
