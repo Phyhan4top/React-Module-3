@@ -1,19 +1,6 @@
 import { Auth_Init,Auth_Success,Auth_Fail, Auth_signOut} from "./actionType";
 import instance from "../../../Axios/axios-order";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDApWHtmWYbo079mAZJuMgi1JDFpNWiHJI",
-  authDomain: "burger-app-d580d.firebaseapp.com",
-  databaseURL: "https://burger-app-d580d-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "burger-app-d580d",
-  storageBucket: "burger-app-d580d.appspot.com",
-  messagingSenderId: "572630176473",
-  appId: "1:572630176473:web:51f399eb8ad79e8c35e4c8",
-  measurementId: "G-D13M68EXKM"
-};
-
-
-
 const authInit=()=>{
  return{
   type:Auth_Init
@@ -27,11 +14,19 @@ const authInit=()=>{
  }
 }
 const authFail=(error)=>{
- return{
+  let err;
+  if(error.response){
+  err={
   type:Auth_Fail,
- error:error,
-  
+ error:error.response.data.error.message
  }
+  }else{
+    err={
+      type:Auth_Fail,
+     error:error.message
+     }
+  }
+ return err
 }
 export const OnSignOut=()=>{
   localStorage.removeItem('token')
@@ -54,7 +49,7 @@ export const SignAuth=(email,password,isSignIn)=>{
     dispatch(authInit())
  const authData={
   email:email,
-  password,password,
+  password:password,
   returnSecureToken:true
  }
  let url=`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDApWHtmWYbo079mAZJuMgi1JDFpNWiHJI`
@@ -71,15 +66,11 @@ instance.post(url,authData)
   
   dispatch(authSuccess(res.data.idToken,res.data.localId))
    dispatch(authoSignOut(res.data.expiresIn))
-   console.log(res)
-  
- 
-
 })
-.catch((error) => {
-  dispatch(authFail(error.response.data.error.message))
- console.log(error.response.data.error.message)
-});
+.catch(error =>{
+   dispatch(authFail(error))
+}
+);
   }
 }
 

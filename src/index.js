@@ -4,10 +4,9 @@ import { createRoot} from 'react-dom/client';
 
 import './index.css';
 import App from './App';
-import registerServiceWorker from './registerServiceWorker';
 import {BrowserRouter} from 'react-router-dom'
 import { Provider } from 'react-redux';
-import { applyMiddleware, combineReducers, createStore } from 'redux';
+import { applyMiddleware, combineReducers, createStore,compose } from 'redux';
 import BurgerReducer from './components/Store/Reducer/Reducer';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
@@ -20,8 +19,16 @@ const RootReducer=combineReducers({
  orders:OrdersReducer,
  auth:AuthReducer
 })
+const middleware=[thunk]
+let enhancers = applyMiddleware(...middleware);
 
-const store=createStore(RootReducer,composeWithDevTools(applyMiddleware(thunk)))
+if (process.env.NODE_ENV === 'development') {
+  const composeEnhancers = composeWithDevTools({});
+  enhancers = composeEnhancers(enhancers);
+}
+
+const store = createStore(RootReducer, enhancers);
+
 
 const Root=createRoot(app)
 

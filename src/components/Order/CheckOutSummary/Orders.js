@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import Order from './Order'
-import instance from '../../../Axios/axios-order'
-import { Delete_Order, Get_Orders, OrdersFetch } from '../../Store/Actions/orderActionCreactors'
+
+import { Delete_Order, Get_Orders} from '../../Store/Actions/orderActionCreactors'
 import { connect } from 'react-redux'
 import Spinner from '../../UI/Spinner/Spinner'
-import withErrorHandler from '../../../hoc/withError'
+
 
 function Orders(props) {
 //  const [orders,setOrder]= useState([])

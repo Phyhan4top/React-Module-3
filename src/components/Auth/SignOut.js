@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react'
-import { Navigate, useNavigate } from 'react-router'
+import { Navigate } from 'react-router'
 import { OnSignOut } from '../Store/Actions/AuthActionCreator'
 import { connect } from 'react-redux'
-import Spinner from '../UI/Spinner/Spinner'
+
 
 function SignOut(props) {
-  const navigate=useNavigate()
+
   useEffect(()=>{
     
   props.onSignOut()

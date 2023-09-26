@@ -5,11 +5,10 @@ import Burger from "../../components/Burger/Burger";
 import BuildControls from "../../components/Burger/BuildControls/BuildControls";
 import Modal from "../../components/UI/Modal/Modal";
 import OrderSummary from "../../components/Burger/OrderSummary/OrderSummary";
-import withError from "../../hoc/withError";
+
 import { connect } from "react-redux";
 import withErrorHandler from "../../hoc/withError";
-import axios from "axios";
-import { Navigate } from "react-router";
+
 
 
 class BurgerBuilder extends Component {
@@ -44,7 +43,7 @@ class BurgerBuilder extends Component {
   }
 
   purchaseHandler = () => {
-    let nav
+  
     if(this.props.token){
        this.setState({ purchasing: true });
     }else{

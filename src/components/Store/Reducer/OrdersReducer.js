@@ -1,5 +1,5 @@
-import { getOrders,errorFetchOrder, deleteOrder, orderSuccess, orderFail, Loading, getOrdersInit, errorFetchOrders} from "../Actions/actionType";
-import { updatedObj } from "./updatedObj";
+import { getOrders, deleteOrder, orderSuccess, orderFail, Loading, getOrdersInit, errorFetchOrders} from "../Actions/actionType";
+import {updatedObj} from '../../../Shared/utility/Utility'
 const init={
   orders:[],
   error:false,

@@ -1,5 +1,5 @@
 import { addIngredient,getIngredients,removeIngredient,fetchIngredientsError} from "../Actions/actionType";
-import { updatedObj } from "./updatedObj";
+import {updatedObj} from '../../../Shared/utility/Utility'
 const INGREDIENT_PRICES = {
   salad: 0.5,
   cheese: 0.4,
@@ -23,38 +23,52 @@ const init = {
   
 };
 
-
-const BurgerReducer = (state = init, action) => {
-  switch (action.type) {
-    case addIngredient:
-      return updatedObj(state,{
+const AddIng=(state,action)=>{
+return  updatedObj(state,{
         ingredients: {
           ...state.ingredients,
           [action.ingredientName]: state.ingredients[action.ingredientName] + 1,
         },
         totalPrice: state.totalPrice + INGREDIENT_PRICES[action.ingredientName],})
+}
+
+const RemoveIng=(state,action)=>{
+ return updatedObj(state,{ ingredients: {
+    ...state.ingredients,
+    [action.ingredientName]: state.ingredients[action.ingredientName] - 1,
+  },
+  totalPrice: state.totalPrice - INGREDIENT_PRICES[action.ingredientName]})
+}
+
+const GetIng=(state,action)=>{
+return  updatedObj(state,  {
+    ingredients:{
+      salad:action.ingredients.salad,
+      bacon:action.ingredients.bacon,
+      cheese:action.ingredients.cheese,
+      meat:action.ingredients.meat
+    },
+   error:false
+  })
+
+}
+
+const GetIngErr=(state,action)=>{
+ return updatedObj(state,{
+    error:action.error
+  })
+}
+const BurgerReducer = (state = init, action) => {
+  switch (action.type) {
+    case addIngredient:
+      return AddIng(state,action)
      
     case removeIngredient:
-      return updatedObj(state,{ ingredients: {
-          ...state.ingredients,
-          [action.ingredientName]: state.ingredients[action.ingredientName] - 1,
-        },
-        totalPrice: state.totalPrice - INGREDIENT_PRICES[action.ingredientName]})
+      return RemoveIng(state,action)
      case getIngredients:
-      return updatedObj(state,  {
-        ingredients:{
-          salad:action.ingredients.salad,
-          bacon:action.ingredients.bacon,
-          cheese:action.ingredients.cheese,
-          meat:action.ingredients.meat
-        },
-       error:false
-      })
-    
+      return GetIng(state,action)
      case fetchIngredientsError:
-      return updatedObj(state,{
-        error:action.error
-      })
+      return GetIngErr(state,action)
     default:
       return state;
   }
